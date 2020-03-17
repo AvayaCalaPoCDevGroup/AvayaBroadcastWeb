@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+  <style>
+    select#destiones-multiple {
+      height: 600px;
+    }
+
+    * {
+      font-family: 'Playfair Display', serif;
+    }
+
+    h1#brandtxt {
+      color: #DA291C;
+    }
+
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    ul.nav.nav-tabs {
+      background: white;
+    }
+
+    .tab-content {
+      background: white;
+    }
+  </style>
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" href="css/custom.css">
+</head>
+
+<body>
+  <nav class="site-header sticky-top py-1">
+    <div class="container d-flex flex-column flex-md-row justify-content-between">
+      <a class="py-2" href="#">
+        America's International PoC Development Team
+      </a>
+
+    </div>
+  </nav>
+
+  <div class="position-relative overflow-hidden p-0 p-md-5 m-md-0 text-center bg-light">
+    <div class="col-md-5 p-lg-5 mx-auto my-5">
+      <h1 class="display-4 font-weight-normal" id="brandtxt">Avaya Broadcast</h1>
+    </div>
+    <div class="product-device shadow-sm d-none d-md-block"></div>
+    <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+            <h2 class="display-5">Tipo</h2>
+            <!-- Bootstrap CSS -->
+            <!-- jQuery first, then Bootstrap JS. -->
+            <!-- Nav tabs -->
+            <nav>
+              <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-sonido-tab" data-toggle="tab" href="#nav-sonido" role="tab" aria-controls="nav-sonido" aria-selected="true">Audio</a>
+                <a class="nav-item nav-link" id="nav-tts-tab" data-toggle="tab" href="#nav-tts" role="tab" aria-controls="nav-tts" aria-selected="false">TTS</a>
+                <a class="nav-item nav-link" id="nav-mensajes-tab" data-toggle="tab" href="#nav-mensajes" role="tab" aria-controls="nav-mensajes" aria-selected="false">Mensaje</a>
+                <a class="nav-item nav-link" id="nav-logo-tab" data-toggle="tab" href="#nav-logo" role="tab" aria-controls="nav-logo" aria-selected="false">Logo</a>
+                <a class="nav-item nav-link" id="nav-video-tab" data-toggle="tab" href="#nav-video" role="tab" aria-controls="nav-video" aria-selected="false">Video</a>
+              </div>
+            </nav>
+            <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-sonido" role="tabpanel" aria-labelledby="nav-sonido-tab">
+                <p class="lead text-muted">Ingresa la URL del audio que quieras reproducir remotamente</p>
+                <input type="tel" id="audio-txt" class="form-control">
+                <hr>
+                <p class="lead text-muted">Audios Engage</p>
+                <select class="form-control" id="predef-audio-engage">
+                  <option selected>Elegir...</option>
+                  <option value="1">AAI_WelcomeEngage_Ding</option>
+                  <option value="2">AAI_WelcomeEnagage2</option>
+                  <option value="3">AAI_IoT2</option>
+                  <option value="4">AAI_Conferencias</option>
+                  <option value="5">AAI_IA_1</option>
+                  <option value="6">AAI_IA_1</option>
+                </select>
+                <hr>
+                <p class="lead text-muted">Audios Espa&ntilde;ol</p>
+                <select class="form-control" id="predef-audio-es">
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/spanish/bonafina.ogg">Bonafina</option>
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/spanish/spotdani.ogg">Daris y Charly</option>
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/spanish/plaza.ogg">Plaza la granja</option>
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/spanish/spotamifin.ogg">Amifin</option>
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/spanish/pinturas.ogg">Pinturas champion</option>
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/spanish/spotvih.ogg">VIH Famecom</option>
+                </select>
+
+                <p class="lead text-muted">Audios Portugu&eacute;s</p>
+                <select class="form-control" id="predef-audio-pt">
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/portugues/cervejabrahma.mp3">Cerveja Brahma</option>
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/portugues/caixaeconomica.mp3">Caixa Economica Federal</option>
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/portugues/agente727.mp3">TransBrasil agente 77</option>
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/portugues/autoclube.mp3">Automovel Clube</option>
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/portugues/pizza.mp3">Guarana Antarctica</option>
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/portugues/sabonetes.mp3">Sabonetes Lifeboy</option>
+                  <option value="http://104.248.23.21/Recursos/audio_vantage/portugues/cigarros.mp3">Cigarros Continental</option>
+                </select>
+                <br>
+                <button class="btn btn-outline-success btn-lg btn-block" id="alert-btn">Enviar</button>
+                <p>Formatos admitidos MP3/WAV</p>
+              </div>
+              <div class="tab-pane fade" id="nav-tts" role="tabpanel" aria-labelledby="nav-tts-tab">
+                <p class="lead text-muted">Escribe un texto y el idioma en el que deseas que sea reproducido</p>
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Texto</label>
+                  <input type="text" class="form-control" id="tts-txt">
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Idioma</label>
+                  <select class="js-example-basic-single" id="idioma-tts" style="width: 100%">
+                  </select>
+                </div>
+                <button class="btn btn-outline-success btn-lg btn-block" id="tts-btn">Enviar</button>
+              </div>
+              <div class="tab-pane fade" id="nav-mensajes" role="tabpanel" aria-labelledby="nav-mensajes-tab">
+                <p class="lead text-muted">Envía un mensaje a la pantalla y lo traduce de acuerdo al idioma del Sistema</p>
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Texto</label>
+                  <input type="text" class="form-control" id="tts-txt2">
+                </div>
+                <button class="btn btn-outline-success btn-lg btn-block" id="tts-btn2">Enviar</button>
+              </div>
+              <div class="tab-pane fade" id="nav-logo" role="tabpanel" aria-labelledby="nav-logo-tab">
+                <p class="lead text-muted">Cambia el logo del Vantage, tienes que ingresar una URL</p>
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">URL</label>
+                  <input type="text" class="form-control" id="img-txt">
+                  <hr>
+                  <select class="form-control" id="predef-logo">
+                    <option value="http://www.rcdecolighting.com/sites/55c63efee8cb91caa5000002/content_entry55e445b341d9ac48ed0000f0/55eff9c1d6c2f2024d001fc9/files/Westin_logo_rgb.jpg">Westing Hotels & Resorts</option>
+                    <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Marriott_Logo.svg/2000px-Marriott_Logo.svg.png">Marriott - Hotels - Resorts - Suites</option>
+                    <option value="http://logowiki.net/wp-content/uploads/imgp/telefonica-super-15-Logo-1-9998.jpg">Telefónica</option>
+                    <option value="https://vignette.wikia.nocookie.net/walmart/images/9/92/Walmart_logo.png">Walmart</option>
+                    <option value="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Avaya_Logo.svg/1280px-Avaya_Logo.svg.png">Avaya</option>
+                  </select>
+                </div>
+                <button class="btn btn-outline-success btn-lg btn-block" id="img-btn">Enviar</button>
+              </div>
+              <div class="tab-pane fade" id="nav-video" role="tabpanel" aria-labelledby="nav-video-tab">
+                <p class="lead text-muted">Video streaming Vantage (Beta)</p>
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">URL</label>
+                  <input type="text" class="form-control" id="video-txt">
+                  <hr>
+                  <select class="form-control" id="predef-video">
+                    <option value="http://104.248.23.21/Recursos/video_vantage/file_example_MP4_480_1_5MG.mp4">Demo Video 1</option>
+                    <option value="http://104.248.23.21/Recursos/video_vantage/nasa_-_arctic_sea_ice_sets_new_record_winter_low.mp4">Demo Video 2</option>
+                    <option value="http://104.248.23.21/Recursos/video_vantage/occultationgraphh264fullsize.mp4">Demo Video 3</option>
+                    <option value="http://104.248.23.21/Recursos/video_vantage/sciencecasts-_total_eclipse_of_the_moon.mp4">Demo Video 4</option>
+                  </select>
+                </div>
+                <button class="btn btn-outline-success btn-lg btn-block" id="video-btn">Enviar</button>
+              </div>
+            </div>
+            </div>
+              <!-- Tab panes -->
+
+
+
+    <div class="col-sm">
+          <h2 class="display-5">Destino</h2>
+          <select class="form-control" multiple id="destiones-multiple">
+          </select>
+
+    </div>
+    </div>
+
+
+
+
+  <footer class="container py-5">
+    <!-- <div class="row">
+      <div class="col-12 col-md">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mb-2" focusable="false" role="img">
+          <title>Product</title>
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+          <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+          <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+          <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+          <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+          <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+        </svg>
+        <small class="d-block mb-3 text-muted">&copy; 2017-2018</small>
+      </div>
+      <div class="col-6 col-md">
+        <h5>Features</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="text-muted" href="#">Cool stuff</a></li>
+          <li><a class="text-muted" href="#">Random feature</a></li>
+          <li><a class="text-muted" href="#">Team feature</a></li>
+          <li><a class="text-muted" href="#">Stuff for developers</a></li>
+          <li><a class="text-muted" href="#">Another one</a></li>
+          <li><a class="text-muted" href="#">Last time</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md">
+        <h5>Resources</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="text-muted" href="#">Resource</a></li>
+          <li><a class="text-muted" href="#">Resource name</a></li>
+          <li><a class="text-muted" href="#">Another resource</a></li>
+          <li><a class="text-muted" href="#">Final resource</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md">
+        <h5>Resources</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="text-muted" href="#">Business</a></li>
+          <li><a class="text-muted" href="#">Education</a></li>
+          <li><a class="text-muted" href="#">Government</a></li>
+          <li><a class="text-muted" href="#">Gaming</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md">
+        <h5>About</h5>
+        <ul class="list-unstyled text-small">
+          <li><a class="text-muted" href="#">Team</a></li>
+          <li><a class="text-muted" href="#">Locations</a></li>
+          <li><a class="text-muted" href="#">Privacy</a></li>
+          <li><a class="text-muted" href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div> -->
+  </footer>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script src="js/lib.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+  <script src="js/custom.js"></script>
+
+</html>
