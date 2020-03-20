@@ -208,7 +208,7 @@ var bodyParser = require('body-parser');
 const basicAuth = require('express-basic-auth');
 
 app.use(bodyParser.json()); // to support JSON-encoded bodies
-app.use('/static', express.static('public'));
+//app.use('/static', express.static('public'));
 
 /*app.use(basicAuth({
     users: { 'jlramirez': 'jlramirezbc9861!' }
@@ -217,7 +217,8 @@ app.use('/static', express.static('public'));
 //Al memomento de obtener el directorio raiz del proyecto de NodeJS, declaramaos 2 funciones req (Request) res(Repsonses)
 
 app.get('/', function(req,res){
-  res.redirect('https://aaadevbroadcast.appspot.com/static/home.html'); 
+  //res.redirect('https://aaadevbroadcast.appspot.com/static/home.html'); 
+  res.sendFile(__dirname+'/home.html');
 });
 
 app.post('/websockets/alert', function(req, res) {

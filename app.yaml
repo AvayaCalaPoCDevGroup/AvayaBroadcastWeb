@@ -27,13 +27,20 @@
 
 
 # [START gae_quickstart_yaml]
-
 runtime: nodejs10
-
+env: standard
+# Usamos una sola instancia ya que la app no tiene muchos usuarios
+manual_scaling:
+  instances: 1
+#Necesario para trabajar con websockets (Socket.io)
+network:
+  session_affinity: true
+#Mapeamos las rutas de nuestro contenido estatico
 handlers:
   - url: /static
     static_dir: public
-
+  - url: /assets
+    static_dir: staticfiles
   - url: /.*
     script: auto
 # [END gae_quickstart_yaml]
