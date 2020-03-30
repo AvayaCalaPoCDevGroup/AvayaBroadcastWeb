@@ -27,8 +27,8 @@
 
 
 # [START gae_quickstart_yaml]
-runtime: nodejs10
-env: standard
+runtime: nodejs
+env: flex
 # Usamos una sola instancia ya que la app no tiene muchos usuarios
 manual_scaling:
   instances: 1
@@ -38,9 +38,7 @@ network:
 #Mapeamos las rutas de nuestro contenido estatico
 handlers:
   - url: /static
-    static_dir: public
-  - url: /assets
-    static_dir: staticfiles
+    static_dir: static
   - url: /.*
     script: auto
 # [END gae_quickstart_yaml]

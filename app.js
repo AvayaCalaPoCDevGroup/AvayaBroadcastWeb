@@ -218,6 +218,18 @@ app.use(bodyParser.json()); // to support JSON-encoded bodies
 
 app.get('/', function(req,res){
   //res.redirect('https://aaadevbroadcast.appspot.com/static/home.html'); 
+  res.sendFile(__dirname+'/Login.html');
+});
+
+app.get('/static/home.html', function(req,res){
+  //res.redirect('https://aaadevbroadcast.appspot.com/static/home.html'); 
+  res.sendFile(__dirname+'/Login.html');
+});
+
+app.post('/websockets/login', function(req, res) {
+
+  //var dest1 = req.body.destino,
+  //Temporalmente solo redirecciono a la pagina de websockets
   res.sendFile(__dirname+'/home.html');
 });
 
@@ -234,9 +246,6 @@ app.post('/websockets/alert', function(req, res) {
     message: url1
   });
   res.send('Notificacion Enviada');
-
-
-
 });
 
 app.post('/websockets/tts', function(req, res) {
