@@ -103,6 +103,7 @@ document.getElementById('submitbtn').addEventListener('click', function (e) {
     }
     $.ajax(settings).done(function(response) {
       console.log(response);
+      //$('#main-container').load(response);
       document.write(response);
     });
 
