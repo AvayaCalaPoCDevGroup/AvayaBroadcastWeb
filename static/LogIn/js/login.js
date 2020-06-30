@@ -21,7 +21,7 @@ document.cookie = "JWT= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
 document.getElementById('submitbtn').addEventListener('click', function (e) {
 
     e.preventDefault();
-    /*document.getElementById('loaderDisplay').classList.add('is-active');
+    document.getElementById('loaderDisplay').classList.add('is-active');
     document.getElementById("loaderDisplay").setAttribute("data-text", "Validando Información");
 
     console.log("Submit");
@@ -34,6 +34,7 @@ document.getElementById('submitbtn').addEventListener('click', function (e) {
             text: 'Please establish the country of origin.'
 
         });
+        document.getElementById('loaderDisplay').classList.remove('is-active');
     } else if (document.getElementById('cliente').value === "" || document.getElementById('cliente').value.length === 0 || /^\s+$/.test(document.getElementById('cliente').value) || document.getElementById('cliente').value.match(/Avaya/) || document.getElementById('cliente').value.match(/AVAYA/) || document.getElementById('cliente').value.match(/avaya/)) {
         Swal({
             type: 'error',
@@ -41,25 +42,37 @@ document.getElementById('submitbtn').addEventListener('click', function (e) {
             text: 'Please do not enter Avaya as a customer.'
 
         });
+        document.getElementById('loaderDisplay').classList.remove('is-active');
     } else if (email !== true) {
         Swal({
             type: 'error',
             title: 'Error',
             text: 'Please enter the email correctly'
         });
+        document.getElementById('loaderDisplay').classList.remove('is-active');
     } else if (document.getElementById('pass').value === "" && email !== true) {
         Swal({
             type: 'error',
             title: 'Error',
             text: 'Please enter the password'
         });
+        document.getElementById('loaderDisplay').classList.remove('is-active');
     } else {
-        var data = new FormData();
-        data.append("action", "LogIn");
-        data.append("Email", CryptoJS.AES.encrypt(document.getElementById('email').value, "AdminControlPoC"));
-        data.append("Pass", CryptoJS.AES.encrypt(document.getElementById('pass').value, "AdminControlPoC"));
-        data.append("Cliente", CryptoJS.AES.encrypt(document.getElementById('cliente').value, "AdminControlPoC"));
-        data.append("Pais", CryptoJS.AES.encrypt(document.getElementById('country').value, "AdminControlPoC"));
+        // var data = new FormData();
+        // data.append("action", "LogIn");
+        // data.append("Email", CryptoJS.AES.encrypt(document.getElementById('email').value, "AdminControlPoC"));
+        // data.append("Pass", CryptoJS.AES.encrypt(document.getElementById('pass').value, "AdminControlPoC"));
+        // data.append("Cliente", CryptoJS.AES.encrypt(document.getElementById('cliente').value, "AdminControlPoC"));
+        // data.append("Pais", CryptoJS.AES.encrypt(document.getElementById('country').value, "AdminControlPoC"));
+        var data = {
+            action: "LogIn",
+            email: document.getElementById('email').value,
+            pass: document.getElementById('pass').value,
+            client: document.getElementById('cliente').value,
+            country: document.getElementById('country').value
+        };
+        var jsondata = JSON.stringify(data);
+
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = false;
         xhr.addEventListener("readystatechange", function () {
@@ -68,18 +81,18 @@ document.getElementById('submitbtn').addEventListener('click', function (e) {
                 document.getElementById("loaderDisplay").setAttribute("data-text", "");
                 try {
                     var result = JSON.parse(this.responseText);
-                    if (result.status === "ok") {
+                    if (result.resp == "authorized") {
                         console.log("Result OK");
                         window.location.reload();
                     } else {
                         Swal({
                             type: 'error',
                             title: 'Error',
-                            text: result.message
+                            text: result.resp
                         });
                     }
                 } catch (error) {
-                    console.error(error);
+                    console.log(error);
                     Swal({
                         type: 'error',
                         title: 'Error',
@@ -90,28 +103,10 @@ document.getElementById('submitbtn').addEventListener('click', function (e) {
             }
         });
 
-        xhr.open("POST", absolutepath + "WebApp");
-        xhr.send(data);
-    }*/
-
-    var endpoint = "https://aaadevbroadcast.appspot.com/websockets/login" ;
-    var settings = {
-      "async": true,
-      "url": endpoint,
-      "crossDomain": true,
-      "method": "POST"
+        xhr.open("POST", absolutepath + "login", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(jsondata);
     }
-    $.ajax(settings).done(function(response) {
-      console.log(response);
-      //$('#main-container').load(response);
-      document.write(response);
-    });
-
-    /*var xhr = new XMLHttpRequest();
-    xhr.withCredentials = false;
-    xhr.open("POST", "https://aaadevbroadcast.appspot.com/websockets/login");
-    xhr.send("data");*/
-
 });
 
 document.getElementById('forgotten').addEventListener('click', function (e) {
