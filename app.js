@@ -15,7 +15,39 @@ var arr2 = [];
 
 const express = require('express'),
   http = require('http'),
+  cookieParser = require('cookie-parser');
+const request = require('request'),
+  session = require('express-session');
+const crypto = require('crypto'),
   fs = require("fs");
+
+
+
+//Funcion para encriptar
+function encrypt(plainText) {
+
+  const key = crypto.pbkdf2Sync(secretKey, salt, 65536, 32, digest);
+  const iv = Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]);
+
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  let encrypted = cipher.update(plainText, 'utf8', 'base64')
+  encrypted += cipher.final('base64');
+  return encrypted;
+}
+
+//Funcion para des encriptar
+function decrypt(strToDecrypt) {
+
+  const key = crypto.pbkdf2Sync(secretKey, salt, 65536, 32, digest);
+  const iv = Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]);
+
+  const decipher = crypto.createDecipheriv(algorithm, key, iv);
+  let decrypted = decipher.update(strToDecrypt, 'base64');
+  decrypted += decipher.final();
+  return decrypted;
+}
+
+
 /*const privateKey = fs.readFileSync('/etc/letsencrypt/live/devavaya.ddns.net/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('/etc/letsencrypt/live/devavaya.ddns.net/cert.pem', 'utf8');
 const ca = fs.readFileSync('/etc/letsencrypt/live/devavaya.ddns.net/chain.pem', 'utf8');*/
@@ -78,10 +110,6 @@ io.on('connection', function(socket) {
       to: "9860",
       message: uniqueArray
     });
-
-
-
-
   });
 
 
@@ -208,7 +236,14 @@ var bodyParser = require('body-parser');
 const basicAuth = require('express-basic-auth');
 
 app.use(bodyParser.json()); // to support JSON-encoded bodies
-//app.use('/static', express.static('public'));
+app.use(express.static('static'));
+app.use(cookieParser());
+app.use(session({
+                  secret: "paioimasd",
+                  saveUninitialized: true,
+                  resave: true,
+                  expires: new Date(Date.now() + (30 * 60 * 1000))
+                }));
 
 /*app.use(basicAuth({
     users: { 'jlramirez': 'jlramirezbc9861!' }
@@ -217,20 +252,79 @@ app.use(bodyParser.json()); // to support JSON-encoded bodies
 //Al memomento de obtener el directorio raiz del proyecto de NodeJS, declaramaos 2 funciones req (Request) res(Repsonses)
 
 app.get('/', function(req,res){
-  //res.redirect('https://aaadevbroadcast.appspot.com/static/home.html'); 
-  res.sendFile(__dirname+'/Login.html');
+  if(req.session.islogged){
+    if(req.session.islogged == 1000){
+      res.sendFile(__dirname+'/home.html');
+    } 
+  } else {
+    res.sendFile(__dirname+'/Login.html');
+  }
 });
 
 app.get('/static/home.html', function(req,res){
-  //res.redirect('https://aaadevbroadcast.appspot.com/static/home.html'); 
-  res.sendFile(__dirname+'/Login.html');
+  res.redirect('/');
 });
 
-app.post('/websockets/login', function(req, res) {
+app.get('/logout', function(req,res){
+  req.session.destroy();
+  res.redirect('https://breeze2-196.collaboratory.avaya.com/services/AAADEVPoCDemoPage/Demos');
+});
 
-  //var dest1 = req.body.destino,
-  //Temporalmente solo redirecciono a la pagina de websockets
-  res.sendFile(__dirname+'/home.html');
+app.post('/login', function(req, res) {
+  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+  console.log("Login req.body: " + req.body.action);
+
+  // var basic = 'Basic ' + Buffer.from(encrypt("WIPq2vKvT2161JzJT0TQRg==") + ':' + encrypt("QRN3vX+joBln8ySFkapj5QA85tNHgWYFUZmPxS/my2GPNgORHiY9hfR0BkvKCCrn")).toString('base64');
+  var basic = 'Basic V0lQcTJ2S3ZUMjE2MUp6SlQwVFFSZz09OlFSTjN2WCtqb0Jsbjh5U0ZrYXBqNVFBODV0TkhnV1lGVVptUHhTL215MkdQTmdPUkhpWTloZlIwQmt2S0NDcm4='
+  var usr = encrypt(req.body.email);
+  var pwd = encrypt(req.body.pass);
+  var email = req.body.email;
+  var country = encrypt(req.body.country);
+  var client = encrypt(req.body.client);
+
+  request.post(
+    {
+      headers :{
+        "Authorization": basic,
+        "Content-Type": "multipart/form-data"
+      },
+      url : "https://breeze2-196.collaboratory.avaya.com/services/AAADEVOAuth2/Token/Authentication",
+      method : "POST",
+      formData : {
+        "username" : usr,
+        "password" : pwd,
+        "pais" : country,
+        "cliente" : client,
+        "grant_type" : "access"
+      }
+    }, function(err, response, body){
+      if(err) console.log("error: "+err);
+      console.log("Body: " +body);
+      //console.log("Response: " + JSON.stringify(response));
+
+      bodyObject = JSON.parse(body);
+
+      //Solo verifico que la respuesta sea de credenciales validas, no refresco el token por que en la app no hago peticiones
+      if(bodyObject.token_access != undefined || bodyObject.token_refresh != undefined) 
+      {
+        req.session.islogged = 1000;
+        res.send({ resp: 'authorized'});
+
+        //Grabamos el acceso en el log-->se comento por que el log ahora lo leva OAUTH
+        // request({
+        //   'method': 'POST',
+        //   'url': 'https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/VantageTTSAccess?usuario='+email+'&pais='+country+'&cliente='+client,
+        //   'headers': {
+        //   }
+        // }, function (error, response) { 
+        //   if (error) throw new Error(error);
+        //   console.log("Registro en logger: " + response.body);
+        // });
+      } else {
+        res.send({ resp: 'unauthorized'});
+      }
+    }
+  );
 });
 
 app.post('/websockets/alert', function(req, res) {

@@ -1,7 +1,8 @@
 console.log("9860");
 var user;
 user = "9860";
-var socket = io('https://aaadevbroadcast.appspot.com');
+//var socket = io('https://aaadevbroadcast.appspot.com');
+var socket = io();
 socket.emit('reg', user);
 $('input#img-txt').val("http://www.rcdecolighting.com/sites/55c63efee8cb91caa5000002/content_entry55e445b341d9ac48ed0000f0/55eff9c1d6c2f2024d001fc9/files/Westin_logo_rgb.jpg");
 //Combo Imagenes predef
