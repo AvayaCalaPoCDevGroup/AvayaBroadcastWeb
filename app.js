@@ -20,6 +20,7 @@ const request = require('request'),
   session = require('express-session');
 const crypto = require('crypto'),
   fs = require("fs");
+const _repo = require('./repository');
 
 
 
@@ -270,61 +271,89 @@ app.get('/logout', function(req,res){
   res.redirect('https://breeze2-196.collaboratory.avaya.com/services/AAADEVPoCDemoPage/Demos');
 });
 
-app.post('/login', function(req, res) {
-  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+app.post('/login', async function(req, res) {
+  //process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
   console.log("Login req.body: " + req.body.action);
 
   // var basic = 'Basic ' + Buffer.from(encrypt("WIPq2vKvT2161JzJT0TQRg==") + ':' + encrypt("QRN3vX+joBln8ySFkapj5QA85tNHgWYFUZmPxS/my2GPNgORHiY9hfR0BkvKCCrn")).toString('base64');
-  var basic = 'Basic V0lQcTJ2S3ZUMjE2MUp6SlQwVFFSZz09OlFSTjN2WCtqb0Jsbjh5U0ZrYXBqNVFBODV0TkhnV1lGVVptUHhTL215MkdQTmdPUkhpWTloZlIwQmt2S0NDcm4='
-  var usr = encrypt(req.body.email);
-  var pwd = encrypt(req.body.pass);
-  var email = req.body.email;
-  var country = encrypt(req.body.country);
-  var client = encrypt(req.body.client);
+  // var basic = 'Basic V0lQcTJ2S3ZUMjE2MUp6SlQwVFFSZz09OlFSTjN2WCtqb0Jsbjh5U0ZrYXBqNVFBODV0TkhnV1lGVVptUHhTL215MkdQTmdPUkhpWTloZlIwQmt2S0NDcm4='
+  // var usr = encrypt(req.body.email);
+  // var pwd = encrypt(req.body.pass);
+  // var email = req.body.email;
+  // var country = encrypt(req.body.country);
+  // var client = encrypt(req.body.client);
 
-  request.post(
-    {
-      headers :{
-        "Authorization": basic,
-        "Content-Type": "multipart/form-data"
-      },
-      url : "https://breeze2-196.collaboratory.avaya.com/services/AAADEVOAuth2/Token/Authentication",
-      method : "POST",
-      formData : {
-        "username" : usr,
-        "password" : pwd,
-        "pais" : country,
-        "cliente" : client,
-        "grant_type" : "access"
-      }
-    }, function(err, response, body){
-      if(err) console.log("error: "+err);
-      console.log("Body: " +body);
-      //console.log("Response: " + JSON.stringify(response));
+  // request.post(
+  //   {
+  //     headers :{
+  //       "Authorization": basic,
+  //       "Content-Type": "multipart/form-data"
+  //     },
+  //     url : "https://breeze2-196.collaboratory.avaya.com/services/AAADEVOAuth2/Token/Authentication",
+  //     method : "POST",
+  //     formData : {
+  //       "username" : usr,
+  //       "password" : pwd,
+  //       "pais" : country,
+  //       "cliente" : client,
+  //       "grant_type" : "access"
+  //     }
+  //   }, function(err, response, body){
+  //     if(err) console.log("error: "+err);
+  //     console.log("Body: " +body);
+  //     //console.log("Response: " + JSON.stringify(response));
 
-      bodyObject = JSON.parse(body);
+  //     bodyObject = JSON.parse(body);
 
-      //Solo verifico que la respuesta sea de credenciales validas, no refresco el token por que en la app no hago peticiones
-      if(bodyObject.token_access != undefined || bodyObject.token_refresh != undefined) 
-      {
-        req.session.islogged = 1000;
-        res.send({ resp: 'authorized'});
+  //     //Solo verifico que la respuesta sea de credenciales validas, no refresco el token por que en la app no hago peticiones
+  //     if(bodyObject.token_access != undefined || bodyObject.token_refresh != undefined) 
+  //     {
+  //       req.session.islogged = 1000;
+  //       res.send({ resp: 'authorized'});
 
-        //Grabamos el acceso en el log-->se comento por que el log ahora lo leva OAUTH
-        // request({
-        //   'method': 'POST',
-        //   'url': 'https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/VantageTTSAccess?usuario='+email+'&pais='+country+'&cliente='+client,
-        //   'headers': {
-        //   }
-        // }, function (error, response) { 
-        //   if (error) throw new Error(error);
-        //   console.log("Registro en logger: " + response.body);
-        // });
-      } else {
-        res.send({ resp: 'unauthorized'});
-      }
-    }
-  );
+  //       //Grabamos el acceso en el log-->se comento por que el log ahora lo leva OAUTH
+  //       // request({
+  //       //   'method': 'POST',
+  //       //   'url': 'https://breeze2-132.collaboratory.avaya.com/services/AAADEVLOGGER/VantageTTSAccess?usuario='+email+'&pais='+country+'&cliente='+client,
+  //       //   'headers': {
+  //       //   }
+  //       // }, function (error, response) { 
+  //       //   if (error) throw new Error(error);
+  //       //   console.log("Registro en logger: " + response.body);
+  //       // });
+  //     } else {
+  //       res.send({ resp: 'unauthorized'});
+  //     }
+  //   }
+  // );
+//////////////////////////////////
+  var pwd = req.body.pass;
+        var email = req.body.email;
+        var country = req.body.country;
+        var client = req.body.client;
+
+        let user = await _repo.getUserByEmail(email);
+
+        if (user.length == 0) { //user with this email not exist
+            res.status(401).send({ resp: 'unauthorized', status: "ok", message: 'User or Password are incorrect. Code 65.' });
+        } else {
+          if (user[0].pass == pwd) {
+            await _repo.setLogin(
+              {
+                  type: 'login',
+                  timestamp: new Date(),
+                  user: email,
+                  demo: 'Vantage Broadcast',
+                  city: country,
+                  client: client
+              }
+          );
+            req.session.islogged = 1000;
+            res.send({ resp: 'authorized'});
+          } else {
+            res.status(401).send({ resp: 'unauthorized', message: 'User or Password are incorrect. Code 15.'});
+          }
+        }
 });
 
 app.post('/websockets/alert', function(req, res) {
